@@ -50,6 +50,7 @@
 						<li class="fragment grow highlight-current-blue">What do Controllers do?</li>
 						<li class="fragment grow highlight-current-blue">Routing</li>
 						<li class="fragment grow highlight-current-blue">REST</li>
+						<li class="fragment grow highlight-current-blue">Callbacks</li>
 						<li class="fragment grow highlight-current-blue">Session/Cookies</li>
 						<li class="fragment grow highlight-current-blue">Flash messages</li>
 						<li class="fragment grow highlight-current-blue">Multiple formats handling</li>
@@ -78,17 +79,80 @@ end
 				</section>
 
 				<section>
-					<h3>Routing</h3>
-					<p align="left">The Rails router recognizes URLs and dispatches them to a controller's action. It can also generate paths and URLs, avoiding the need to hardcode strings in your views.</p>
-					<a href="http://guides.rubyonrails.org/routing.html">Rails Routing</a>
+					<h3>Passing the parameters</h3>
+					<pre><code>
+class ClientsController < ApplicationController
+  # The URL for this action would look like this in order to list activated
+  # clients: /clients?status=activated
+  def index
+    if params[:status] == "activated"
+      @clients = Client.activated
+    else
+      @clients = Client.inactivated
+    end
+  end
+end
+					</code></pre>
 				</section>
 
 				<section>
-					<h3>REST</h3>
+					<h3>Sanitizing (Strong parameters)</h3>
+					<pre><code>
+class PeopleController < ActionController::Base
+  def create
+    Person.create(person_params)
+  end
+
+  private
+    
+    def person_params
+      params.require(:person).permit(:name, :age)
+    end
+end
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Routing</h3>
+					<p align="left">The Rails router recognizes URLs and dispatches them to a controller's action. It can also generate paths and URLs, avoiding the need to hardcode strings in your views.</p>
+					<a href="http://guides.rubyonrails.org/routing.html" target="_blank">Rails Routing</a>
+				</section>
+
+				<section>
+					<h3>REST (REpresentational State Transfer)</h3>
+					<p align="left">REST is an architecture style for designing networked applications. Every resource has its unique URI. RESTful applications use HTTP requests to post data (create and/or update), read data (e.g., make queries), and delete data. Thus, REST uses HTTP for all four CRUD (Create/Read/Update/Delete) operations. So we can manipulate that object using its URI and HTTP actions.</p>
+					<a href="http://guides.rubyonrails.org/routing.html#crud-verbs-and-actions" target="_blank">Practical using in Rails</a>
+				</section>
+
+				<section>
+					<h2>Callbacks/Filters</h2>
+					<p align="left">Filters are methods that are run before, after or "around" a controller action.</p>
+					<ul>
+						<li>Before</li>
+						<li>After</li>
+						<li>Around</li>
+					</ul>
+					<pre><code>
+class ApplicationController < ActionController::Base
+  before_action :require_login
+ 
+  private
+ 
+  def require_login
+    redirect_to new_login_url unless logged_in?
+  end
+end
+					</code></pre>
+					<a href="http://guides.rubyonrails.org/action_controller_overview.html#filters" target="_blank">Filters</a>
 				</section>
 
 				<section>
 					<h3>Session/Cookies</h3>
+					<p align="left">HTTP is as STATELESS protocol. Stateless protocol is a communications protocol that treats each request as an independent transaction that is unrelated to any previous request so that the communication consists of independent pairs of request and response.</p>
+					<p align="left">Your application has a session for each user in which you can store small amounts of data that will be persisted between requests. The session is only available in the controller and the view.</p>
+					<a href="http://guides.rubyonrails.org/action_controller_overview.html#accessing-the-session" target="_blank">Accessing the Session Examples</a>
+					<p align="left">Your application can store small amounts of data ON THE CLIENT - called cookies - that will be persisted across requests.</p>
+					<a href="http://guides.rubyonrails.org/action_controller_overview.html#cookies" target="_blank">Accessing the Cookies Examples</a>
 				</section>
 
 				<section>
