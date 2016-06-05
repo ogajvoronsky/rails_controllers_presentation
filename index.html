@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Rails Controllers</title>
+
+		<meta name="description" content="Rails Controllers">
+		<meta name="author" content="Vasyl Lasiak">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Rails</h2>
+					<h3>Controllers</h3>
+				</section>
+
+				<section>
+					<h2>Quick lecture overview</h2>
+					<ul>
+						<li class="fragment grow highlight-current-blue">What do Controllers do?</li>
+						<li class="fragment grow highlight-current-blue">Routing</li>
+						<li class="fragment grow highlight-current-blue">REST</li>
+						<li class="fragment grow highlight-current-blue">Session/Cookies</li>
+						<li class="fragment grow highlight-current-blue">Flash messages</li>
+						<li class="fragment grow highlight-current-blue">Multiple formats handling</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>What do Controllers do?</h3>
+					<p align="left">Controller is the C in MVC. The controller receives the request, fetch or save data from a model and use a view to create HTML output.</p>
+				</section>
+
+				<section>
+					<p align="left">When your application receives a request, the routing will determine which controller and action to run, then Rails creates an instance of that controller and runs the method with the same name as the action.</p>
+					<pre><code>
+class ClientsController < ApplicationController
+  def new
+  end
+end
+					</code></pre>
+					<p align="left">As an example, if a user goes to /clients/new in your application to add a new client, Rails will create an instance of ClientsController and run the new method.</p>
+				</section>
+
+				<section>
+					<h3>Using Generator</h3>
+					<img src="img/generator.png" width="85%" alt="Generator" style="border: none" />
+				</section>
+
+				<section>
+					<h3>Routing</h3>
+					<p align="left">The Rails router recognizes URLs and dispatches them to a controller's action. It can also generate paths and URLs, avoiding the need to hardcode strings in your views.</p>
+					<a href="http://guides.rubyonrails.org/routing.html">Rails Routing</a>
+				</section>
+
+				<section>
+					<h3>REST</h3>
+				</section>
+
+				<section>
+					<h3>Session/Cookies</h3>
+				</section>
+
+				<section>
+					<h3>Flash messages</h3>
+					<p align="left">The flash is a special part of the session which is cleared with each request. This means that values stored there will only be available in the next request, which is useful for passing error messages etc.</p>
+					<pre><code>
+class LoginsController < ApplicationController
+  def destroy
+    session[:current_user_id] = nil
+    flash[:notice] = "You have successfully logged out."
+    redirect_to root_url
+
+    #redirect_to root_url, notice: "You have successfully logged out."
+  end
+end
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Multiple formats handling</h3>
+					<pre><code>
+class UsersController < ApplicationController
+  def index
+    @users = User.all
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render xml: @users}
+      format.json { render json: @users}
+    end
+  end
+end
+					</code></pre>
+				</section>
+
+				<section>
+					<img src="img/QA.jpg" width="85%" alt="Q&A" style="border: none" />
+					<h6 class="fragment">No questions? No answers!</h6>
+					<p>
+						<small>Created by Vasyl Lasiak / <a href="https://github.com/vlasiak" target="_blank">@vlasiak</a></small>
+					</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				slideNumber: true,
+				history: false,
+				center: true,
+				overview: true,
+				touch: true,
+				loop: false,
+				autoSlide: 0,
+
+				transition: 'zoom', // none/fade/slide/convex/concave/zoom
+				transitionSpeed: 'fast', // default/fast/slow
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+	</body>
+</html>
